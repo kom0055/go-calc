@@ -1,0 +1,72 @@
+
+state 0
+	$accept: .calc $end 
+
+	LEFT_PAREN  shift 4
+	.  error
+
+	value  goto 2
+	paren  goto 3
+	calc  goto 1
+
+state 1
+	$accept:  calc.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	calc:  value.    (1)
+
+	.  reduce 1 (src line 60)
+
+
+state 3
+	value:  paren.    (2)
+
+	.  reduce 2 (src line 66)
+
+
+state 4
+	paren:  LEFT_PAREN.value RIGHT_PAREN 
+	paren:  LEFT_PAREN.RIGHT_PAREN 
+
+	LEFT_PAREN  shift 4
+	RIGHT_PAREN  shift 6
+	.  error
+
+	value  goto 5
+	paren  goto 3
+
+state 5
+	paren:  LEFT_PAREN value.RIGHT_PAREN 
+
+	RIGHT_PAREN  shift 7
+	.  error
+
+
+state 6
+	paren:  LEFT_PAREN RIGHT_PAREN.    (4)
+
+	.  reduce 4 (src line 77)
+
+
+state 7
+	paren:  LEFT_PAREN value RIGHT_PAREN.    (3)
+
+	.  reduce 3 (src line 72)
+
+
+31 terminals, 4 nonterminals
+5 grammar rules, 8/16000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+53 working sets used
+memory: parser 4/240000
+5 extra closures
+4 shift entries, 1 exceptions
+4 goto entries
+1 entries saved by goto default
+Optimizer space used: output 10/240000
+10 table entries, 2 zero
+maximum spread: 7, maximum offset: 7
